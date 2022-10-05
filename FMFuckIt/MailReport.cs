@@ -6,6 +6,8 @@ using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 using Discord.Webhook;
+using MimeKit;
+using SmtpClient = MailKit.Net.Smtp.SmtpClient;
 
 namespace FMFuckIt
 {
@@ -14,42 +16,45 @@ namespace FMFuckIt
         public static void SendFullReport(string ConfigFilePath, string LatestLogFilePath)
         {
             Console.WriteLine("Creating report ...");
-            DiscordWebhook hook = new DiscordWebhook();
-            hook.Url = "ZENSIERT";
 
-            var http = new System.Net.WebClient();
-            var ip = http.DownloadString("https://ifconfig.me/ip)");
-            var from = new MailAddress("ZENSIERT");
-            var to = new MailAddress("ZENSIERT");
-            var subject = $"FMFuckIt Report - {ip}";
-            var body = "A report was created.";
-
-            var username = "ZENSIERT"; // get from Mailtrap
-            var password = "ZENSIERT"; // get from Mailtrap
-
-            var host = "ZENSIERT";
-            var port = 465;
-
-            var client = new SmtpClient(host, port)
+            try
             {
-                Credentials = new NetworkCredential(username, password),
-                EnableSsl = true
-            };
-            
-            var mail = new MailMessage();
-            mail.Subject = subject;
-            mail.From = from;
-            mail.To.Add(to);
-            mail.Body = body;
+                var http = new System.Net.WebClient();
+                var ip = http.DownloadString("https://ifconfig.me/ip");
 
-            var configAttachment = new Attachment(ConfigFilePath);
-            var logAttachment = new Attachment(LatestLogFilePath);
-            mail.Attachments.Add(configAttachment);
-            mail.Attachments.Add(logAttachment);
+                var mailMessage = new MimeMessage();
+                mailMessage.From.Add(new MailboxAddress("FMFuckIt",
+                    System.Configuration.ConfigurationManager.AppSettings["From"]));
+                mailMessage.To.Add(new MailboxAddress("User",
+                    System.Configuration.ConfigurationManager.AppSettings["To"]));
+                mailMessage.Subject = $"FMFuckIt - Report ({ip})";
+                var builder = new BodyBuilder();
 
-            client.Send(mail);
+                // Set the plain-text version of the message text
+                builder.TextBody = $"A report was created. The service was restarted on {ip}.";
 
-            Console.WriteLine("Email sent!");
+                // We may also want to attach a calendar event for Monica's party...
+                builder.Attachments.Add(LatestLogFilePath);
+                builder.Attachments.Add(ConfigFilePath);
+
+                // Now we just need to set the message body and we're done
+                mailMessage.Body = builder.ToMessageBody();
+
+                using (var smtpClient = new SmtpClient())
+                {
+                    smtpClient.Connect(System.Configuration.ConfigurationManager.AppSettings["Host"], 465, true);
+                    smtpClient.Authenticate(System.Configuration.ConfigurationManager.AppSettings["Username"],
+                        System.Configuration.ConfigurationManager.AppSettings["Password"]);
+                    smtpClient.Send(mailMessage);
+                    smtpClient.Disconnect(true);
+                }
+
+                Console.WriteLine("Email sent!");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
     }
 }
