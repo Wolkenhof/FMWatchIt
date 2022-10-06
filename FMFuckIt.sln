@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32728.150
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FMFuckIt", "FMFuckIt\FMFuckIt.csproj", "{95BC153B-2F4D-4F96-959B-713E27CA3189}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FMFuckIt", "FMFuckIt\FMFuckIt.csproj", "{95BC153B-2F4D-4F96-959B-713E27CA3189}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Setup", "Setup\Setup.csproj", "{137C8EB6-C523-41AB-8417-82E7A0399687}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{95BC153B-2F4D-4F96-959B-713E27CA3189}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95BC153B-2F4D-4F96-959B-713E27CA3189}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95BC153B-2F4D-4F96-959B-713E27CA3189}.Release|Any CPU.Build.0 = Release|Any CPU
+		{137C8EB6-C523-41AB-8417-82E7A0399687}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{137C8EB6-C523-41AB-8417-82E7A0399687}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{137C8EB6-C523-41AB-8417-82E7A0399687}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{137C8EB6-C523-41AB-8417-82E7A0399687}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

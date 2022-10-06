@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
-using Discord.Webhook;
 using MimeKit;
 using SmtpClient = MailKit.Net.Smtp.SmtpClient;
 
@@ -13,7 +11,7 @@ namespace FMFuckIt
 {
     internal class MailReport
     {
-        public static void SendFullReport(string ConfigFilePath, string LatestLogFilePath)
+        public static void SendFullReport(string LatestLogFilePath, string reason)
         {
             Console.WriteLine("Creating report ...");
 
@@ -31,11 +29,8 @@ namespace FMFuckIt
                 var builder = new BodyBuilder();
 
                 // Set the plain-text version of the message text
-                builder.TextBody = $"A report was created. The service was restarted on {ip}.";
-
-                // We may also want to attach a calendar event for Monica's party...
+                builder.TextBody = $"A report was created. Reason: {reason}.\nThe service was restarted on {ip}.";
                 builder.Attachments.Add(LatestLogFilePath);
-                builder.Attachments.Add(ConfigFilePath);
 
                 // Now we just need to set the message body and we're done
                 mailMessage.Body = builder.ToMessageBody();
