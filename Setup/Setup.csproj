@@ -5,10 +5,17 @@
 		<TargetFramework>net6.0-windows</TargetFramework>
 		<Nullable>enable</Nullable>
 		<UseWPF>true</UseWPF>
+		<PackageId>FMFuckIt Setup</PackageId>
+		<Authors>Wolkenhof GmbH</Authors>
+		<Company>Jonas Günner</Company>
+		<Product>FMFuckIt</Product>
+		<Copyright>Copyright (c) 2022 Wolkenhof GmbH.</Copyright>
+		<PackageProjectUrl>https://github.com/Wolkenhof/FMFuckIt</PackageProjectUrl>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+		<PackageReference Include="TaskScheduler" Version="2.10.1" />
 		<PackageReference Include="WPF-UI" Version="2.0.3" />
 	</ItemGroup>
 

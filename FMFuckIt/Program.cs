@@ -12,6 +12,7 @@ namespace FMFuckIt
     {
         private static int trys = 0;
         private static int max_trys = 5;
+        private static int startedDateTime = DateTime.Now.Day;
 
         static void Main(string[] args)
         {
@@ -19,7 +20,8 @@ namespace FMFuckIt
             Console.WriteLine("Copyright (c) 2018 - 2022 valnoxy. All rights reserved.");
             Console.WriteLine("----------------------------------------------------------");
             Console.WriteLine("Report to: " + System.Configuration.ConfigurationManager.AppSettings["To"]);
-
+            Console.WriteLine("Report to: " + System.Configuration.ConfigurationManager.AppSettings["To2"]);
+            
             ExtendedServiceController xServiceController = new ExtendedServiceController(Configuration.ServiceName);
             xServiceController.StatusChanged += xServiceController_StatusChanged;
             Console.Read();
@@ -30,9 +32,11 @@ namespace FMFuckIt
         {
             Console.WriteLine("Status Changed: " + e.Status);
 
-            if (DateTime.Now.Hour == 0 && DateTime.Now.Minute == 0)
+            // If new day, reset trys to 0
+            if (DateTime.Now.Day != startedDateTime)
             {
                 trys = 0;
+                startedDateTime = DateTime.Now.Day;
             }
 
             if (e.Status == ServiceControllerStatus.Stopped)
@@ -54,8 +58,8 @@ namespace FMFuckIt
                 }
                 else
                 {
-                    Console.WriteLine("Max trys reached! Creating report ...");
-                    MailReport.SendFullReport("C:\\ProgramData\\ECI DCA\\logs\\dca.log", "Max trys reached!");
+                    Console.WriteLine("The maximum attempts per day have been exceeded! Creating report ...");
+                    MailReport.SendFullReport("C:\\ProgramData\\ECI DCA\\logs\\dca.log", "The maximum attempts per day have been exceeded");
                     trys = 0;
                 }
             }

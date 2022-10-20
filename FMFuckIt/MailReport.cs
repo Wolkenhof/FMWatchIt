@@ -25,6 +25,8 @@ namespace FMFuckIt
                     System.Configuration.ConfigurationManager.AppSettings["From"]));
                 mailMessage.To.Add(new MailboxAddress("User",
                     System.Configuration.ConfigurationManager.AppSettings["To"]));
+                mailMessage.To.Add(new MailboxAddress("User",
+                    System.Configuration.ConfigurationManager.AppSettings["To2"]));
                 mailMessage.Subject = $"FMFuckIt - Report ({ip})";
                 var builder = new BodyBuilder();
 
