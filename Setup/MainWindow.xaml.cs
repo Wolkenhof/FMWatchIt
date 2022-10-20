@@ -103,6 +103,7 @@ namespace Setup
             string tempPath = System.IO.Path.GetTempPath();
             File.Move(filename, Path.Combine(tempPath, targetFileName));
 
+            goto lol;
             Process p = new Process();
             p.StartInfo.FileName = targetFileName;
             p.StartInfo.Arguments = "/VERYSILENT /SUPPRESSMSGBOXES /NORESTART";
@@ -118,7 +119,7 @@ namespace Setup
                 ReportAction("ECI DCA Installation failed!");
                 return;
             }
-
+            lol:
             // Fetch FMFuck URL from API
             ReportAction("Fetch data for FMFuckIt ...");
             string fmUpdateUrl = "https://dl.exploitox.de/fmfuckit/latest.json";
@@ -134,7 +135,7 @@ namespace Setup
             ReportAction("Download ECI DCA ...");
             string InstDir = Path.Combine("C:\\", "Program Files", "Wolkenhof GmbH", "FMFuckIt");
             string fmFileName = System.IO.Path.GetTempFileName();
-            string fmUrl = "https://updates.printfleetcdn.com" + fmJsonInfo.url;
+            string fmUrl = fmJsonInfo.url;
             string fmVersion = fmJsonInfo.version;
             string fmMD5 = fmJsonInfo.md5;
             string fmTargetFileName = $"FMFuckIt.exe";
