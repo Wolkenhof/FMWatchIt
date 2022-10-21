@@ -29,6 +29,8 @@ namespace Setup
         private readonly BackgroundWorker installBackgroundWorker = new();
         private readonly string UpdaterAPI = "https://updates.printfleetcdn.com/dca-pulse/latest.json";
         private static string AuthToken;
+        private static bool ConfigIsChecked = false;
+        private static bool VerboseIsChecked = false;
         
         public class UpdateInfo
         {
@@ -65,22 +67,27 @@ namespace Setup
             InstallBtn.IsEnabled = AuthTokenTb.Text != "";
         }
         void backgroundWorker_ProgressChanged(object sender, ProgressChangedEventArgs e) => ProgrBar.Value = e.ProgressPercentage;
-        private void InstallBtn_Click(object sender, RoutedEventArgs e) => installBackgroundWorker.RunWorkerAsync();
+        private void InstallBtn_Click(object sender, RoutedEventArgs e)
+        {
+            ConfigIsChecked = ConfigCB.IsChecked == true;
+            VerboseIsChecked = VerboseCB.IsChecked == true;
+            installBackgroundWorker.RunWorkerAsync();
+        }
 
         private void InstallAction(object sender, DoWorkEventArgs e)
         {
             // Fetch URL from internal updater api
-            ReportAction("Fetching data from server ...");
+            ReportAction("Fetching data from server ...", 0);
             string jsonContent;
             using (var wc = new System.Net.WebClient())
                 jsonContent = wc.DownloadString(UpdaterAPI);
 
             // Parse JSON
-            ReportAction("Parsing data from server ...");
+            ReportAction("Parsing data from server ...", 10);
             var updateInfo = Newtonsoft.Json.JsonConvert.DeserializeObject<UpdateInfo>(jsonContent);
 
             // Download ECI DCA from JSON URL
-            ReportAction("Download ECI DCA ...");
+            ReportAction("Download ECI DCA ...", 20);
             string filename = System.IO.Path.GetTempFileName();
             string url = "https://updates.printfleetcdn.com" + updateInfo.ga.Windows.url;
             string version = updateInfo.ga.Windows.version;
@@ -90,7 +97,7 @@ namespace Setup
                 wc.DownloadFile(url, filename);
 
             // Check MD5
-            ReportAction("Verifying download ...");
+            ReportAction("Verifying download ...", 30);
             string md5Local = CalculateMD5(filename);
             if (md5Local != md5)
             {
@@ -99,40 +106,50 @@ namespace Setup
             }
 
             // Install
-            ReportAction("Installing ECI DCA ...");
+            ReportAction("Installing ECI DCA ...", 40);
             string tempPath = System.IO.Path.GetTempPath();
-            File.Move(filename, Path.Combine(tempPath, targetFileName));
-
-            goto lol;
-            Process p = new Process();
-            p.StartInfo.FileName = targetFileName;
-            p.StartInfo.Arguments = "/VERYSILENT /SUPPRESSMSGBOXES /NORESTART";
-            p.Start();
-            p.WaitForExit();
-
-            if (p.ExitCode == 0)
+            try
             {
-                ReportAction("ECI DCA Installation successful!");
+                if (File.Exists(Path.Combine(tempPath, targetFileName)))
+                    File.Delete(Path.Combine(tempPath, targetFileName));
+                File.Move(filename, Path.Combine(tempPath, targetFileName));
+                
+                Process p = new Process();
+                p.StartInfo.FileName = targetFileName;
+                if (VerboseIsChecked == true)
+                    p.StartInfo.Arguments = "/VERYSILENT /SUPPRESSMSGBOXES /NORESTART";
+                p.Start();
+                p.WaitForExit();
+
+                if (p.ExitCode == 0)
+                {
+                    ReportAction("ECI DCA Installation successful!");
+                }
+                else
+                {
+                    ReportAction("ECI DCA Installation failed!");
+                    return;
+                }
             }
-            else
+            catch
             {
-                ReportAction("ECI DCA Installation failed!");
+                ReportAction("ECI DCA Installation failed. Please try again.");
                 return;
             }
-            lol:
+
             // Fetch FMFuck URL from API
-            ReportAction("Fetch data for FMFuckIt ...");
+            ReportAction("Fetch data for FMFuckIt ...", 50);
             string fmUpdateUrl = "https://dl.exploitox.de/fmfuckit/latest.json";
             string fmJson;
 
             using (var wc = new System.Net.WebClient())
                 fmJson = wc.DownloadString(fmUpdateUrl);
             
-            ReportAction("Parsing data from server ...");
+            ReportAction("Parsing data from server ...", 60);
             var fmJsonInfo = Newtonsoft.Json.JsonConvert.DeserializeObject<FMFuckInfo>(fmJson);
 
             // Download ECI DCA from JSON URL
-            ReportAction("Download ECI DCA ...");
+            ReportAction("Download ECI DCA ...", 70);
             string InstDir = Path.Combine("C:\\", "Program Files", "Wolkenhof GmbH", "FMFuckIt");
             string fmFileName = System.IO.Path.GetTempFileName();
             string fmUrl = fmJsonInfo.url;
@@ -140,10 +157,10 @@ namespace Setup
             string fmMD5 = fmJsonInfo.md5;
             string fmTargetFileName = $"FMFuckIt.exe";
             using (var wc = new System.Net.WebClient())
-                wc.DownloadFile(url, fmFileName);
+                wc.DownloadFile(fmUrl, fmFileName);
 
             // Check MD5
-            ReportAction("Verifying download ...");
+            ReportAction("Verifying download ...", 80);
             string fmMD5Local = CalculateMD5(fmFileName);
             if (fmMD5Local != fmMD5)
             {
@@ -152,8 +169,10 @@ namespace Setup
             }
 
             // Install
-            ReportAction("Installing FMFuckIt ...");
+            ReportAction("Installing FMFuckIt ...", 90);
             Directory.CreateDirectory(InstDir);
+            if (File.Exists(Path.Combine(InstDir, fmTargetFileName)))
+                File.Delete(Path.Combine(InstDir, fmTargetFileName));
             File.Move(fmFileName, Path.Combine(InstDir, fmTargetFileName));
             using (Microsoft.Win32.TaskScheduler.TaskService ts = new Microsoft.Win32.TaskScheduler.TaskService())
             {
@@ -165,7 +184,7 @@ namespace Setup
                 td.Triggers.Add(new Microsoft.Win32.TaskScheduler.LogonTrigger());
 
                 // Create an action that will launch Notepad whenever the trigger fires
-                td.Actions.Add(new Microsoft.Win32.TaskScheduler.ExecAction(Path.Combine(), null, null));
+                td.Actions.Add(new Microsoft.Win32.TaskScheduler.ExecAction(Path.Combine(InstDir, fmTargetFileName), null, null));
 
                 // Set the run level to the highest privilege
                 td.Principal.RunLevel = Microsoft.Win32.TaskScheduler.TaskRunLevel.Highest;
@@ -178,7 +197,27 @@ namespace Setup
                 ts.RootFolder.RegisterTaskDefinition(@"Wolkenhof GmbH\FMFuckIt", td);
             }
 
-            ReportAction("Installing FMFuckIt ...");
+            // Download configuration
+            if (ConfigIsChecked == true)
+            {
+                ReportAction("Downloading configuration ...", 95);
+                try
+                {
+                    string configUrl = "https://dl.exploitox.de/fmfuckit/config.xml";
+                    string configFullPath = Path.Combine(InstDir, "FMFuckIt.dll.config");
+                    using (var wc = new System.Net.WebClient())
+                        wc.DownloadFile(configUrl, configFullPath);
+                }
+                catch { ReportAction("Failed to write configuration file."); }
+            }
+
+            // Write token to file
+            try
+            {
+                File.WriteAllText(Path.Combine(InstDir, "token.txt"), AuthToken);
+            }
+            catch {;}
+            ReportAction("Installation completed.", 100);
         }
 
         static string CalculateMD5(string filename)
@@ -193,10 +232,12 @@ namespace Setup
             }
         }
 
-        private void ReportAction(string s)
+        private void ReportAction(string s, int progress = -1)
         {
             Dispatcher.Invoke(new Action(() => {
                 ActionLabel.Content = s;
+                if (progress != -1)
+                    ProgrBar.Value = progress;
             }), DispatcherPriority.ContextIdle);
         }
 

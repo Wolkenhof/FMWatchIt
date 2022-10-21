@@ -16,7 +16,7 @@ namespace FMFuckIt
 
         static void Main(string[] args)
         {
-            Console.WriteLine("FMFuckIt - A fucking service watcher for FMAudit (ECI DCA)");
+            Console.WriteLine("FMWatchIt - A service watcher for FMAudit (ECI DCA)");
             Console.WriteLine("Copyright (c) 2018 - 2022 valnoxy. All rights reserved.");
             Console.WriteLine("----------------------------------------------------------");
             Console.WriteLine("Report to: " + System.Configuration.ConfigurationManager.AppSettings["To"]);

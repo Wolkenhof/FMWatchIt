@@ -5,12 +5,18 @@
 		<TargetFramework>net6.0-windows</TargetFramework>
 		<Nullable>enable</Nullable>
 		<UseWPF>true</UseWPF>
-		<PackageId>FMFuckIt Setup</PackageId>
+		<PackageId>FMWatchIt Setup</PackageId>
 		<Authors>Wolkenhof GmbH</Authors>
 		<Company>Jonas Günner</Company>
 		<Product>FMFuckIt</Product>
 		<Copyright>Copyright (c) 2022 Wolkenhof GmbH.</Copyright>
 		<PackageProjectUrl>https://github.com/Wolkenhof/FMFuckIt</PackageProjectUrl>
+		<ApplicationManifest>app.manifest</ApplicationManifest>
+		<RuntimeIdentifier>win7-x64</RuntimeIdentifier>
+		<PublishSingleFile>true</PublishSingleFile>
+		<SelfContained>true</SelfContained>
+		<PublishReadyToRun>true</PublishReadyToRun>
+		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
 	</PropertyGroup>
 
 	<ItemGroup>
