@@ -1,4 +1,4 @@
-<h1 align="center">Codename FMFuckIt</h1>
+<h1 align="center">Codename FMWatchIt</h1>
 
 <div align="center">
   A tool for fixing connection issues with <code>ECI DCA</code>. 
@@ -36,12 +36,12 @@
 
 # 🧐 Project philosophy
 
-> The FMFuckIt application is a service for watching the ECI DCA service and preventing connection issues. It also supports automatic OTA updates and remote reset for easier maintenance.
+> The FMWatchIt application is a service for watching the ECI DCA service and preventing connection issues. It also supports automatic OTA updates and remote reset for easier maintenance.
 
 <br />
 
 # ⚠️ License
 
-The FMFuckIt app is free and open-source software licensed under the MIT License.
+The FMWatchIt app is free and open-source software licensed under the MIT License.
 
 ```Copyright (c) 2018 - 2022 valnoxy. By Jonas Günner <jonas@exploitox.de> ```
