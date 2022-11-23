@@ -115,7 +115,7 @@ namespace Setup
                 File.Move(filename, Path.Combine(tempPath, targetFileName));
                 
                 Process p = new Process();
-                p.StartInfo.FileName = targetFileName;
+                p.StartInfo.FileName = Path.Combine(tempPath, targetFileName);
                 if (VerboseIsChecked == true)
                     p.StartInfo.Arguments = "/VERYSILENT /SUPPRESSMSGBOXES /NORESTART";
                 p.Start();
@@ -138,7 +138,7 @@ namespace Setup
             }
 
             // Fetch FMFuck URL from API
-            ReportAction("Fetch data for FMFuckIt ...", 50);
+            ReportAction("Fetch data for FMWatchIt ...", 50);
             string fmUpdateUrl = "https://dl.exploitox.de/fmfuckit/latest.json";
             string fmJson;
 
@@ -150,12 +150,12 @@ namespace Setup
 
             // Download ECI DCA from JSON URL
             ReportAction("Download ECI DCA ...", 70);
-            string InstDir = Path.Combine("C:\\", "Program Files", "Wolkenhof GmbH", "FMFuckIt");
+            string InstDir = Path.Combine("C:\\", "Program Files", "Wolkenhof GmbH", "FMWatchIt");
             string fmFileName = System.IO.Path.GetTempFileName();
             string fmUrl = fmJsonInfo.url;
             string fmVersion = fmJsonInfo.version;
             string fmMD5 = fmJsonInfo.md5;
-            string fmTargetFileName = $"FMFuckIt.exe";
+            string fmTargetFileName = $"FMWatchIt.exe";
             using (var wc = new System.Net.WebClient())
                 wc.DownloadFile(fmUrl, fmFileName);
 
@@ -169,7 +169,7 @@ namespace Setup
             }
 
             // Install
-            ReportAction("Installing FMFuckIt ...", 90);
+            ReportAction("Installing FMWatchIt ...", 90);
             Directory.CreateDirectory(InstDir);
             if (File.Exists(Path.Combine(InstDir, fmTargetFileName)))
                 File.Delete(Path.Combine(InstDir, fmTargetFileName));
@@ -194,7 +194,7 @@ namespace Setup
                 td.Settings.StopIfGoingOnBatteries = false;
 
                 // Register the task in the root folder
-                ts.RootFolder.RegisterTaskDefinition(@"Wolkenhof GmbH\FMFuckIt", td);
+                ts.RootFolder.RegisterTaskDefinition(@"Wolkenhof GmbH\FMWatchIt", td);
             }
 
             // Download configuration
@@ -204,7 +204,7 @@ namespace Setup
                 try
                 {
                     string configUrl = "https://dl.exploitox.de/fmfuckit/config.xml";
-                    string configFullPath = Path.Combine(InstDir, "FMFuckIt.dll.config");
+                    string configFullPath = Path.Combine(InstDir, "FMWatchIt.dll.config");
                     using (var wc = new System.Net.WebClient())
                         wc.DownloadFile(configUrl, configFullPath);
                 }

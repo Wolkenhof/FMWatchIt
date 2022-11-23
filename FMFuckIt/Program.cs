@@ -21,7 +21,8 @@ namespace FMFuckIt
             Console.WriteLine("----------------------------------------------------------");
             Console.WriteLine("Report to: " + System.Configuration.ConfigurationManager.AppSettings["To"]);
             Console.WriteLine("Report to: " + System.Configuration.ConfigurationManager.AppSettings["To2"]);
-            
+            Console.WriteLine("Report to: " + System.Configuration.ConfigurationManager.AppSettings["To3"]);
+
             ExtendedServiceController xServiceController = new ExtendedServiceController(Configuration.ServiceName);
             xServiceController.StatusChanged += xServiceController_StatusChanged;
             Console.Read();

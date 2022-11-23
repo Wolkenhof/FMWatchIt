@@ -21,12 +21,14 @@ namespace FMFuckIt
                 var ip = http.DownloadString("https://ifconfig.me/ip");
 
                 var mailMessage = new MimeMessage();
-                mailMessage.From.Add(new MailboxAddress("FMFuckIt",
+                mailMessage.From.Add(new MailboxAddress(System.Configuration.ConfigurationManager.AppSettings["Name"],
                     System.Configuration.ConfigurationManager.AppSettings["From"]));
                 mailMessage.To.Add(new MailboxAddress("User",
                     System.Configuration.ConfigurationManager.AppSettings["To"]));
                 mailMessage.To.Add(new MailboxAddress("User",
                     System.Configuration.ConfigurationManager.AppSettings["To2"]));
+                mailMessage.To.Add(new MailboxAddress("User",
+                    System.Configuration.ConfigurationManager.AppSettings["To3"]));
                 mailMessage.Subject = $"FMFuckIt - Report ({ip})";
                 var builder = new BodyBuilder();
 
