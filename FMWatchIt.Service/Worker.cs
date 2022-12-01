@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using System.ServiceProcess;
 namespace FMWatchIt.Service;
 
@@ -17,6 +18,8 @@ public class Worker : BackgroundService
         {
             Console.WriteLine("FMWatchIt - A service watcher for FMAudit (ECI DCA)");
             Console.WriteLine("Copyright (c) 2018 - 2022 valnoxy. All rights reserved.");
+            string version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            Console.WriteLine();
             Console.WriteLine("Report to: " + System.Configuration.ConfigurationManager.AppSettings["To"]);
             Console.WriteLine("Report to: " + System.Configuration.ConfigurationManager.AppSettings["To2"]);
             Console.WriteLine("Report to: " + System.Configuration.ConfigurationManager.AppSettings["To3"]);

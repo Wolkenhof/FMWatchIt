@@ -483,4 +483,6 @@ FodyWeavers.xsd
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudio,rider
 
+# Please don't leak my data :<
 FMFuckIt/App.config
+FMWatchIt.Service

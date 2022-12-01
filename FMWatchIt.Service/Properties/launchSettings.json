@@ -1,11 +1,12 @@
-﻿{
+{
   "profiles": {
     "FMWatchIt.Service": {
       "commandName": "Project",
-      "dotnetRunMessages": true,
+      "commandLineArgs": "--update",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development"
-      }
+      },
+      "dotnetRunMessages": true
     }
   }
 }

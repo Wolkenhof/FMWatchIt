@@ -5,6 +5,11 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>dotnet-FMWatchIt.Service-2ce8afc7-653e-4171-8e9b-df686e01d60e</UserSecretsId>
+    <Title>FMWatchIt Service</Title>
+    <Authors>Wolkenhof GmbH</Authors>
+    <Company>Wolkenhof GmbH</Company>
+    <AssemblyVersion>1.1.0.0</AssemblyVersion>
+    <FileVersion>1.1.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
