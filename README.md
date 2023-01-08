@@ -26,8 +26,8 @@
 
 <div align="center">
   <sub>Built with ❤︎ by
-  <a href="https://twitter.com/valnoxy">valnoxy</a> and
-  <a href="https://github.com/valnoxy/fmfuckit/graphs/contributors">
+  <a href="https://github.com/valnoxy">valnoxy</a> and
+  <a href="https://github.com/Wolkenhof/FMWatchIt/graphs/contributors">
     contributors
   </a>
 </div>
@@ -43,5 +43,3 @@
 # ⚠️ License
 
 The FMWatchIt app is free and open-source software licensed under the MIT License.
-
-```Copyright (c) 2018 - 2022 valnoxy. By Jonas Günner <jonas@exploitox.de> ```
